@@ -1,0 +1,9 @@
+name: '01-20 VueJS training'
+description: 'My training code for VueJS course 01-20'
+authors:
+    - 'Carlos Tovar'
+resources:
+    - 'https://github.com/cartovarc/vuejs-playground/'
+    - 'https://www.udemy.com/course/vuejs-2-the-complete-guide'
+wrap: d
+

@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>VueJS Examples 01-20</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p v-once> Example call function and show output (render only once): {{ say_something() }}</p>
+        <p> Example call function and show output: {{ say_something() }}</p>
+        <p> Example link with error: <a href="{{ example_link }}">link</a></p>
+        <p> Example link OK: <a v-bind:href="example_link">link</a></p>
+        <p v-once> Example render var only once: {{ my_message }}</p>
+        <p> Example render var listening binding: {{ my_message }}</p>
+        <p v-once> Hacking my_message var: {{ hack_message() }}</p>
+        <p v-once> Example insert html code: <span v-html="html_code"></span></p>
+        <p>
+            Example click event
+            <button v-on:click="increase_counter(2)">
+                Increase Counter
+            </button>
+            {{ counter }}
+        </p>
+        Example on mouse move event:
+        <table v-on:mousemove="update_coordinates('useless', $event)" frame="box">
+            <tr>
+                <th colspan="2">Coordinates</th>
+            </tr>
+            <tr>
+                <td>{{ x }}</td>
+                <td>{{ y }}</td>
+            </tr>
+        </table>
+    </div>
+    <script src="demo.js"></script>
+</body>
+
+</html>
