@@ -42,8 +42,8 @@ export default {
     ...mapGetters('tasks', ['tasks']),
   },
   components: {
-    'task': require('components/Task/Task.vue').default,
-    'add-task': require('components/Modals/AddTask.vue').default,
+    'task': require('components/Tasks/Task.vue').default,
+    'add-task': require('components/Tasks/Modals/AddTask.vue').default,
   }
 }
 </script>
