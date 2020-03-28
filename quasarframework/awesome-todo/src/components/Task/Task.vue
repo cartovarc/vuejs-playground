@@ -17,7 +17,9 @@
       </q-item-label>
     </q-item-section>
 
-    <q-item-section side>
+    <q-item-section
+      v-if="task.dueDate"
+      side>
       <div class="row">
         <div class="colum justify-center">
           <q-icon
