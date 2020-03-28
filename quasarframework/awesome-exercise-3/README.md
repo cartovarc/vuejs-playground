@@ -433,7 +433,7 @@ This is my solution :)
       No description provided.
     </span>
   </q-card-section>
-```html
+```
 
 
 8.  If no image is provided, fall back to the image statics/image-placeholder.png
@@ -443,4 +443,4 @@ This is my solution :)
     basic
     contain
   >
-```html
+```
