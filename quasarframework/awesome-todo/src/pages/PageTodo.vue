@@ -1,36 +1,42 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page>
 
-    <div class="q-mb-lg row">
-      <search class="col"/>
-      <sort/>
-    </div>
+    <div class="q-pa-md full-height full-width absolute column">
+      <div class="q-mb-lg row">
+        <search class="col"/>
+        <sort/>
+      </div>
 
-    <p
-      v-if="search && !Object.keys(tasksTodo).length && !Object.keys(tasksCompleted).length">
-      No search results
-    </p>
+      <p
+        v-if="search && !Object.keys(tasksTodo).length && !Object.keys(tasksCompleted).length">
+        No search results
+      </p>
 
-    <no-tasks
-      v-if="!Object.keys(tasksTodo).length && !search"
-      @showAddTask="showAddTask = true"/>
+      <q-scroll-area class="q-scroll-area-tasks">
+        <no-tasks
+          v-if="!Object.keys(tasksTodo).length && !search"
+          @showAddTask="showAddTask = true"/>
 
-    <tasks-todo
-      v-if="Object.keys(tasksTodo).length"
-      :tasksTodo="tasksTodo"/>
+        <tasks-todo
+          v-if="Object.keys(tasksTodo).length"
+          :tasksTodo="tasksTodo"/>
 
-    <tasks-completed
-      v-if="Object.keys(tasksCompleted).length"
-      :tasksCompleted="tasksCompleted"/>
+      <tasks-completed
+        v-if="Object.keys(tasksCompleted).length"
+        :tasksCompleted="tasksCompleted"
+        class="q-mb-xl"/>
+      </q-scroll-area>
 
-    <div class="absolute-bottom text-center q-mb-lg">
-      <q-btn
-      @click="showAddTask = true"
-        round
-        color="primary"
-        size="24px"
-        icon="add"
-      />
+      <div class="absolute-bottom text-center q-mb-lg no-pointer-events">
+        <q-btn
+        @click="showAddTask = true"
+          round
+          class="all-pointer-events"
+          color="primary"
+          size="24px"
+          icon="add"
+        />
+      </div>
     </div>
 
     <q-dialog v-model="showAddTask">
@@ -70,4 +76,8 @@ export default {
 </script>
 
 <style>
+  .q-scroll-area-tasks {
+    display: flex;
+    flex-grow: 1;
+  }
 </style>

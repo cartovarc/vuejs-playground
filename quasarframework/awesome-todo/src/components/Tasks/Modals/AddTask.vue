@@ -20,8 +20,10 @@
 
 <script>
 import { mapActions} from 'vuex'
+import addEditTaskMixin from 'src/mixins/mixin-add-edit-task.js'
 
 export default {
+  mixins: [addEditTaskMixin],
   data() {
     return {
       taskToSubmit: {
@@ -48,13 +50,6 @@ export default {
       this.taskToSubmit.dueDate = '';
       this.taskToSubmit.dueTime = '';
     }
-  },
-  components: {
-    'modal-header': require('components/Tasks/Modals/Shared/ModalHeader.vue').default,
-    'modal-task-name': require('components/Tasks/Modals/Shared/ModalTaskName.vue').default,
-    'modal-due-date': require('components/Tasks/Modals/Shared/ModalDueDate.vue').default,
-    'modal-due-time': require('components/Tasks/Modals/Shared/ModalDueTime.vue').default,
-    'modal-buttons': require('components/Tasks/Modals/Shared/ModalButtons.vue').default
   }
 }
 </script>
