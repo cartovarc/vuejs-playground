@@ -1,8 +1,9 @@
 <template>
   <q-page class="q-pa-md">
 
-    <div class="q-mb-lg">
-      <search/>
+    <div class="q-mb-lg row">
+      <search class="col"/>
+      <sort/>
     </div>
 
     <p
@@ -58,6 +59,7 @@ export default {
     'tasks-completed': require('components/Tasks/TasksCompleted.vue').default,
     'no-tasks': require('components/Tasks/NoTasks.vue').default,
     'search': require('components/Tasks/Tools/Search.vue').default,
+    'sort': require('components/Tasks/Tools/Sort.vue').default,
   },
   mounted() {
     this.$root.$on('showAddTask', () => {
