@@ -15,21 +15,12 @@
 </template>
 
 <script>
+import { selectAll } from 'src/directives/directive-select-all.js'
+
 export default {
   props: ['name'],
   directives: {
-    selectAll: {
-      inserted(el) {
-        // issue, select does not work in first popup
-        // https://github.com/cartovarc/vuejs-playground/issues/7
-        let input = el.querySelector('.q-field__native')
-        input.addEventListener('focus', () => {
-          if(input.value.length) {
-            input.select()
-          }
-        });
-      }
-    }
+    selectAll
   }
 }
 </script>

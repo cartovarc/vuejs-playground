@@ -43,7 +43,7 @@ module.exports = function (ctx) {
       all: 'auto',
 
       components: [],
-      directives: [],
+      directives: ['TouchHold'],
 
       // Quasar plugins
       plugins: ['Dialog']
