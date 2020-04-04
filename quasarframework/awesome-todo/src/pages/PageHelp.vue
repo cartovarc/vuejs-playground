@@ -1,6 +1,7 @@
 <template>
   <q-page class="q-pt-lg q-pl-lg">
     <q-btn
+      to="/settings"
       color="primary"
       icon="chevron_left"
       label="Back"
