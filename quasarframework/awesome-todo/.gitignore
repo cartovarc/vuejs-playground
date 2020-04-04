@@ -34,3 +34,9 @@ yarn-error.log*
 
 # Credentials
 /credentials/firebase-config.js
+
+# Firebase
+.firebase
+.firebaserc
+firebase.json
+
