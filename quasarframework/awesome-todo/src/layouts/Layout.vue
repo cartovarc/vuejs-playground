@@ -6,10 +6,18 @@
           Awesome Todo
         </q-toolbar-title>
         <q-btn
-        to="/auth"
+          v-if="!loggedIn"
+          to="/auth"
           class="absolute-right"
           icon-right="account_circle"
           label="Login"
+          flat/>
+        <q-btn
+          @click="logout"
+          v-else
+          class="absolute-right"
+          icon-right="account_circle"
+          label="Logout"
           flat/>
       </q-toolbar>
     </q-header>
@@ -27,6 +35,7 @@
     </q-footer>
 
     <q-drawer
+      v-if="loggedIn"
       v-model="leftDrawerOpen"
       :breakpoint="767"
       :width="250"
@@ -56,6 +65,8 @@
 
 <script>
 import NavLink from 'components/NavLink'
+import { mapState } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'MainLayout',
@@ -64,6 +75,9 @@ export default {
     NavLink
   },
 
+  computed: {
+    ...mapState('auth', ['loggedIn'])
+  },
   data () {
     return {
       leftDrawerOpen: false,
@@ -81,6 +95,12 @@ export default {
           to: '/settings'
         }
       ]
+    }
+  },
+  methods: {
+    ...mapActions('auth', ['logoutUser']),
+    logout() {
+      this.logoutUser();
     }
   }
 }
