@@ -1,26 +1,27 @@
 import Vue from 'vue';
 import { uid } from 'quasar'
+import { firebaseDb, firebaseAuth } from 'boot/firebase'
 
 const state = {
   tasks: {
-    "ID1": {
-      name: 'Get chicharron',
-      completed: false,
-      dueDate: '2020/03/27',
-      dueTime: '15:30'
-    },
-    "ID2": {
-      name: 'Get bananas',
-      completed: true,
-      dueDate: '2020/03/28',
-      dueTime: '16:30'
-    },
-    "ID3": {
-      name: 'Get apples',
-      completed: false,
-      dueDate: '2020/03/29',
-      dueTime: '17:30'
-    }
+    // "ID1": {
+    //   name: 'Get chicharron',
+    //   completed: false,
+    //   dueDate: '2020/03/27',
+    //   dueTime: '15:30'
+    // },
+    // "ID2": {
+    //   name: 'Get bananas',
+    //   completed: true,
+    //   dueDate: '2020/03/28',
+    //   dueTime: '16:30'
+    // },
+    // "ID3": {
+    //   name: 'Get apples',
+    //   completed: false,
+    //   dueDate: '2020/03/29',
+    //   dueTime: '17:30'
+    // }
   },
   search: '',
   sort: 'name',
@@ -45,25 +46,70 @@ const mutations = {
 }
 
 const actions = {
-  updateTask({ commit }, payload) {
-    commit('updateTask', payload);
+  updateTask({ dispatch }, payload) {
+    dispatch('fbUpdateTask', payload);
   },
-  deleteTask({ commit }, id){
-    commit('deleteTask', id);
+  deleteTask({ dispatch }, id){
+    dispatch('fbDeleteTask', id);
   },
-  addTask({ commit }, task) {
+  addTask({ dispatch }, task) {
     let id = uid();
     let payload = {
       id: id,
       task: task
     }
-    commit('addTask', payload);
+    dispatch('fbAddTask', payload);
   },
   setSearch({ commit }, value) {
     commit('setSearch', value);
   },
   setSort({ commit }, value) {
     commit('setSort', value);
+  },
+  fbReadData({ commit }) {
+    let uid = firebaseAuth.currentUser.uid;
+    let userTasks = firebaseDb.ref('tasks/' + uid);
+
+    // child added
+    userTasks.on('child_added', snapshot => {
+      let task = snapshot.val();
+      let payload = {
+        id: snapshot.key,
+        task: task
+      }
+      commit('addTask', payload);
+    })
+
+    // child changed
+    userTasks.on('child_changed', snapshot => {
+      let task = snapshot.val();
+      let payload = {
+        id: snapshot.key,
+        updates: task
+      }
+      commit('updateTask', payload);
+    })
+
+    // child removed
+    userTasks.on('child_removed', snapshot => {
+      let taskId = snapshot.key;
+      commit('deleteTask', taskId);
+    })
+  },
+  fbAddTask({}, payload){
+    let uid = firebaseAuth.currentUser.uid;
+    let taskRef = firebaseDb.ref('tasks/' + uid + '/' + payload.id);
+    taskRef.set(payload.task);
+  },
+  fbUpdateTask({}, payload){
+    let uid = firebaseAuth.currentUser.uid;
+    let taskRef = firebaseDb.ref('tasks/' + uid + '/' + payload.id);
+    taskRef.update(payload.updates);
+  },
+  fbDeleteTask({}, taskId){
+    let uid = firebaseAuth.currentUser.uid;
+    let taskRef = firebaseDb.ref('tasks/' + uid + '/' + taskId);
+    taskRef.remove();
   }
 }
 
