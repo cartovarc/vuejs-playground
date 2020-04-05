@@ -2,41 +2,52 @@
   <q-page>
 
     <div class="q-pa-md full-height full-width absolute column">
-      <div class="q-mb-lg row">
-        <search class="col"/>
-        <sort/>
-      </div>
+      <template v-if="tasksDownloaded">
+        <div class="q-mb-lg row">
+          <search class="col"/>
+          <sort/>
+        </div>
 
-      <p
-        v-if="search && !Object.keys(tasksTodo).length && !Object.keys(tasksCompleted).length">
-        No search results
-      </p>
+        <p
+          v-if="search && !Object.keys(tasksTodo).length && !Object.keys(tasksCompleted).length">
+          No search results
+        </p>
 
-      <q-scroll-area class="q-scroll-area-tasks">
-        <no-tasks
-          v-if="!Object.keys(tasksTodo).length && !search && !settings.showTasksInOneList"
-          @showAddTask="showAddTask = true"/>
+        <q-scroll-area class="q-scroll-area-tasks">
+          <no-tasks
+            v-if="!Object.keys(tasksTodo).length && !search && !settings.showTasksInOneList"
+            @showAddTask="showAddTask = true"/>
 
-        <tasks-todo
-          v-if="Object.keys(tasksTodo).length"
-          :tasksTodo="tasksTodo"/>
+          <tasks-todo
+            v-if="Object.keys(tasksTodo).length"
+            :tasksTodo="tasksTodo"/>
 
-      <tasks-completed
-        v-if="Object.keys(tasksCompleted).length"
-        :tasksCompleted="tasksCompleted"
-        class="q-mb-xl"/>
-      </q-scroll-area>
+        <tasks-completed
+          v-if="Object.keys(tasksCompleted).length"
+          :tasksCompleted="tasksCompleted"
+          class="q-mb-xl"/>
+        </q-scroll-area>
 
-      <div class="absolute-bottom text-center q-mb-lg no-pointer-events">
-        <q-btn
-        @click="showAddTask = true"
-          round
-          class="all-pointer-events"
-          color="primary"
-          size="24px"
-          icon="add"
-        />
-      </div>
+        <div class="absolute-bottom text-center q-mb-lg no-pointer-events">
+          <q-btn
+          @click="showAddTask = true"
+            round
+            class="all-pointer-events"
+            color="primary"
+            size="24px"
+            icon="add"
+          />
+        </div>
+      </template>
+
+      <template v-else>
+        <span class="absolute-center">
+          <q-spinner
+            color="primary"
+            size="3em"
+          />
+        </span>
+      </template>
     </div>
 
     <q-dialog v-model="showAddTask">
@@ -58,7 +69,7 @@ export default {
   computed: {
     ...mapGetters('tasks', ['tasksTodo', 'tasksCompleted']),
     ...mapGetters('settings', ['settings']),
-    ...mapState('tasks', ['search']),
+    ...mapState('tasks', ['search', 'tasksDownloaded']),
   },
   components: {
     'add-task': require('components/Tasks/Modals/AddTask.vue').default,
