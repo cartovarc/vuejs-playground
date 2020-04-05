@@ -1,6 +1,7 @@
 import Vue from 'vue';
-import { uid } from 'quasar'
+import { uid, Notify } from 'quasar'
 import { firebaseDb, firebaseAuth } from 'boot/firebase'
+import { showErrorMessage } from 'src/functions/function-show-error-message'
 
 const state = {
   tasks: {},
@@ -18,6 +19,9 @@ const mutations = {
   },
   addTask(state, payload) {
     Vue.set(state.tasks, payload.id, payload.task);
+  },
+  clearTasks(state) {
+    state.tasks = {}
   },
   setSearch(state, value) {
     state.search = value;
@@ -61,6 +65,9 @@ const actions = {
     // check initial data
     userTasks.once('value', snapshot => {
       commit('setTasksDownloaded', true);
+    }, error => {
+      showErrorMessage(error.message);
+      // this.$router.replace('/auth');
     })
 
     // child added
@@ -92,17 +99,38 @@ const actions = {
   fbAddTask({}, payload){
     let uid = firebaseAuth.currentUser.uid;
     let taskRef = firebaseDb.ref('tasks/' + uid + '/' + payload.id);
-    taskRef.set(payload.task);
+    taskRef.set(payload.task, error => {
+      if(error) {
+        showErrorMessage(error.message);
+      }else{
+          Notify.create('Task added');
+      }
+    });
   },
   fbUpdateTask({}, payload){
     let uid = firebaseAuth.currentUser.uid;
     let taskRef = firebaseDb.ref('tasks/' + uid + '/' + payload.id);
-    taskRef.update(payload.updates);
+    taskRef.update(payload.updates, error => {
+      if(error) {
+        showErrorMessage(error.message);
+      }else{
+        let keys = Object.keys(payload.updates);
+        if (!(keys.includes('completed') && keys.length == 1)) {
+          Notify.create('Task updated');
+        }
+      }
+    });
   },
   fbDeleteTask({}, taskId){
     let uid = firebaseAuth.currentUser.uid;
     let taskRef = firebaseDb.ref('tasks/' + uid + '/' + taskId);
-    taskRef.remove();
+    taskRef.remove(error => {
+      if(error) {
+        showErrorMessage(error.message);
+      }else{
+        Notify.create('Task deleted');
+      }
+    });
   }
 }
 

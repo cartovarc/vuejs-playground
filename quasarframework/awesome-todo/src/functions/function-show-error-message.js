@@ -3,7 +3,7 @@ import { Loading, Dialog } from 'quasar'
 export function showErrorMessage(errorMessage) {
   Loading.hide();
   Dialog.create({
-    title: 'error',
+    title: 'Error',
     message: errorMessage
   })
 }
