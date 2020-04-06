@@ -13,7 +13,7 @@ export default {
     ...mapActions('auth', ['handleAuthStateChanged']),
 
   },
-  mounted() {
+  mounted () {
     this.getSettings();
     this.handleAuthStateChanged();
   }
@@ -21,8 +21,7 @@ export default {
 </script>
 
 <style>
-  .text-strikethrough {
-    text-decoration: line-through;
-  }
-
+.text-strikethrough {
+  text-decoration: line-through;
+}
 </style>

@@ -1,4 +1,4 @@
-import { firebaseConfig } from '../../credentials/firebase-config.js'
+import { firebaseConfig } from "../../credentials/firebase-config.js";
 
 var firebase = require("firebase/app");
 
@@ -9,4 +9,4 @@ let firebaseApp = firebase.initializeApp(firebaseConfig);
 let firebaseAuth = firebaseApp.auth();
 let firebaseDb = firebaseApp.database();
 
-export { firebaseAuth, firebaseDb }
+export { firebaseAuth, firebaseDb };

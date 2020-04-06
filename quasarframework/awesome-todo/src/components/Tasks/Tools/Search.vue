@@ -4,13 +4,15 @@
     @keyup.esc="searchField = ''"
     v-select-all
     v-model="searchField"
-    label="Search">
+    label="Search"
+  >
     <template v-slot:append>
       <q-icon
         v-if="searchField !== ''"
         name="close"
         @click="searchField = ''"
-        class="cursor-pointer" />
+        class="cursor-pointer"
+      />
       <q-icon name="search" />
     </template>
   </q-input>
@@ -25,10 +27,10 @@ export default {
   computed: {
     ...mapState('tasks', ['search']),
     searchField: {
-      get() {
+      get () {
         return this.search;
       },
-      set(value) {
+      set (value) {
         this.setSearch(value);
       }
     }

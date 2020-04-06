@@ -5,13 +5,16 @@
       <q-card-section class="q-pt-none">
         <modal-task-name
           ref="modalTaskName"
-          :name.sync="taskToSubmit.name"/>
+          :name.sync="taskToSubmit.name"
+        />
         <modal-due-date
           @clear="clearDueDate"
-          :dueDate.sync="taskToSubmit.dueDate"/>
+          :dueDate.sync="taskToSubmit.dueDate"
+        />
         <modal-due-time
           v-show="taskToSubmit.dueDate"
-          :dueTime.sync="taskToSubmit.dueTime"/>
+          :dueTime.sync="taskToSubmit.dueTime"
+        />
       </q-card-section>
       <modal-buttons></modal-buttons>
     </q-form>
@@ -19,12 +22,12 @@
 </template>
 
 <script>
-import { mapActions} from 'vuex'
+import { mapActions } from 'vuex'
 import addEditTaskMixin from 'src/mixins/mixin-add-edit-task.js'
 
 export default {
   mixins: [addEditTaskMixin],
-  data() {
+  data () {
     return {
       taskToSubmit: {
         name: '',
@@ -36,17 +39,17 @@ export default {
   },
   methods: {
     ...mapActions('tasks', ['addTask']),
-    submitForm() {
+    submitForm () {
       this.$refs.modalTaskName.$refs.taskName.validate();
       if (!this.$refs.modalTaskName.$refs.taskName.hasError) {
         this.submitTask();
       }
     },
-    submitTask() {
+    submitTask () {
       this.addTask(this.taskToSubmit);
       this.$emit('close');
     },
-    clearDueDate() {
+    clearDueDate () {
       this.taskToSubmit.dueDate = '';
       this.taskToSubmit.dueTime = '';
     }

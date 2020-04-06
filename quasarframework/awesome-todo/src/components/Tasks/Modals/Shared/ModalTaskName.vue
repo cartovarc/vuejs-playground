@@ -10,7 +10,8 @@
       clearable
       clear-icon="close"
       ref="taskName"
-      label="Task name"/>
+      label="Task name"
+    />
   </div>
 </template>
 

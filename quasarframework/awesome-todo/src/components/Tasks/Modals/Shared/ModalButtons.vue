@@ -3,7 +3,8 @@
     <q-btn
       label="Save"
       color="primary"
-      type="submit"/>
+      type="submit"
+    />
   </q-card-actions>
 </template>
 

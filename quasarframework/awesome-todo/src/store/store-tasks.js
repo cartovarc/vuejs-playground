@@ -1,14 +1,14 @@
-import Vue from 'vue';
-import { uid, Notify } from 'quasar'
-import { firebaseDb, firebaseAuth } from 'boot/firebase'
-import { showErrorMessage } from 'src/functions/function-show-error-message'
+import Vue from "vue";
+import { uid, Notify } from "quasar";
+import { firebaseDb, firebaseAuth } from "boot/firebase";
+import { showErrorMessage } from "src/functions/function-show-error-message";
 
 const state = {
   tasks: {},
-  search: '',
-  sort: 'name',
-  tasksDownloaded: false,
-}
+  search: "",
+  sort: "name",
+  tasksDownloaded: false
+};
 
 const mutations = {
   updateTask(state, payload) {
@@ -21,7 +21,7 @@ const mutations = {
     Vue.set(state.tasks, payload.id, payload.task);
   },
   clearTasks(state) {
-    state.tasks = {}
+    state.tasks = {};
   },
   setSearch(state, value) {
     state.search = value;
@@ -32,118 +32,122 @@ const mutations = {
   setTasksDownloaded(state, value) {
     state.tasksDownloaded = value;
   }
-}
+};
 
 const actions = {
   updateTask({ dispatch }, payload) {
-    dispatch('fbUpdateTask', payload);
+    dispatch("fbUpdateTask", payload);
   },
-  deleteTask({ dispatch }, id){
-    dispatch('fbDeleteTask', id);
+  deleteTask({ dispatch }, id) {
+    dispatch("fbDeleteTask", id);
   },
   addTask({ dispatch }, task) {
     let id = uid();
     let payload = {
       id: id,
       task: task
-    }
-    dispatch('fbAddTask', payload);
+    };
+    dispatch("fbAddTask", payload);
   },
   setSearch({ commit }, value) {
-    commit('setSearch', value);
+    commit("setSearch", value);
   },
   setSort({ commit }, value) {
-    commit('setSort', value);
+    commit("setSort", value);
   },
   setTasksDownloaded({ commit }, value) {
-    commit('setTasksDownloaded', value);
+    commit("setTasksDownloaded", value);
   },
   fbReadData({ commit }) {
     let uid = firebaseAuth.currentUser.uid;
-    let userTasks = firebaseDb.ref('tasks/' + uid);
+    let userTasks = firebaseDb.ref("tasks/" + uid);
 
     // check initial data
-    userTasks.once('value', snapshot => {
-      commit('setTasksDownloaded', true);
-    }, error => {
-      showErrorMessage(error.message);
-      // this.$router.replace('/auth');
-    })
+    userTasks.once(
+      "value",
+      snapshot => {
+        commit("setTasksDownloaded", true);
+      },
+      error => {
+        showErrorMessage(error.message);
+        // this.$router.replace('/auth');
+      }
+    );
 
     // child added
-    userTasks.on('child_added', snapshot => {
+    userTasks.on("child_added", snapshot => {
       let task = snapshot.val();
       let payload = {
         id: snapshot.key,
         task: task
-      }
-      commit('addTask', payload);
-    })
+      };
+      commit("addTask", payload);
+    });
 
     // child changed
-    userTasks.on('child_changed', snapshot => {
+    userTasks.on("child_changed", snapshot => {
       let task = snapshot.val();
       let payload = {
         id: snapshot.key,
         updates: task
-      }
-      commit('updateTask', payload);
-    })
+      };
+      commit("updateTask", payload);
+    });
 
     // child removed
-    userTasks.on('child_removed', snapshot => {
+    userTasks.on("child_removed", snapshot => {
       let taskId = snapshot.key;
-      commit('deleteTask', taskId);
-    })
+      commit("deleteTask", taskId);
+    });
   },
-  fbAddTask({}, payload){
+  fbAddTask({}, payload) {
     let uid = firebaseAuth.currentUser.uid;
-    let taskRef = firebaseDb.ref('tasks/' + uid + '/' + payload.id);
+    let taskRef = firebaseDb.ref("tasks/" + uid + "/" + payload.id);
     taskRef.set(payload.task, error => {
-      if(error) {
+      if (error) {
         showErrorMessage(error.message);
-      }else{
-          Notify.create('Task added');
+      } else {
+        Notify.create("Task added");
       }
     });
   },
-  fbUpdateTask({}, payload){
+  fbUpdateTask({}, payload) {
     let uid = firebaseAuth.currentUser.uid;
-    let taskRef = firebaseDb.ref('tasks/' + uid + '/' + payload.id);
+    let taskRef = firebaseDb.ref("tasks/" + uid + "/" + payload.id);
     taskRef.update(payload.updates, error => {
-      if(error) {
+      if (error) {
         showErrorMessage(error.message);
-      }else{
+      } else {
         let keys = Object.keys(payload.updates);
-        if (!(keys.includes('completed') && keys.length == 1)) {
-          Notify.create('Task updated');
+        if (!(keys.includes("completed") && keys.length == 1)) {
+          Notify.create("Task updated");
         }
       }
     });
   },
-  fbDeleteTask({}, taskId){
+  fbDeleteTask({}, taskId) {
     let uid = firebaseAuth.currentUser.uid;
-    let taskRef = firebaseDb.ref('tasks/' + uid + '/' + taskId);
+    let taskRef = firebaseDb.ref("tasks/" + uid + "/" + taskId);
     taskRef.remove(error => {
-      if(error) {
+      if (error) {
         showErrorMessage(error.message);
-      }else{
-        Notify.create('Task deleted');
+      } else {
+        Notify.create("Task deleted");
       }
     });
   }
-}
+};
 
 const getters = {
-  tasksSorted: (state) => {
+  tasksSorted: state => {
     let tasksSorted = {},
-        keysOrdered = Object.keys(state.tasks);
+      keysOrdered = Object.keys(state.tasks);
 
     keysOrdered.sort((a, b) => {
       let taskAProp = state.tasks[a][state.sort].toLowerCase();
       let taskBProp = state.tasks[b][state.sort].toLowerCase();
       if (taskAProp > taskBProp) return 1;
-      else if(taskAProp < taskBProp) return -1;
+      else if (taskAProp < taskBProp) return -1;
       else return 0;
     });
 
@@ -154,7 +158,7 @@ const getters = {
   },
   tasksFiltered: (state, getters) => {
     let tasksSorted = getters.tasksSorted;
-    if(state.search) {
+    if (state.search) {
       let tasksFiltered = {};
       Object.keys(tasksSorted).forEach(key => {
         let task = tasksSorted[key];
@@ -190,7 +194,7 @@ const getters = {
     });
     return tasks;
   }
-}
+};
 
 export default {
   namespaced: true,
@@ -198,4 +202,4 @@ export default {
   mutations,
   actions,
   getters
-}
+};

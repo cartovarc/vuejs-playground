@@ -5,7 +5,8 @@
         <template v-slot:avatar>
           <q-icon
             name="account_circle"
-            color="primary" />
+            color="primary"
+          />
         </template>
         {{ tab | titleCase}} to access your Todos anywhere
       </q-banner>
@@ -18,7 +19,8 @@
         label="Email"
         ref="email"
         lazy-rules
-        :rules="[ val => isValidEmailAddress(val) || 'Please enter an valid email address']"/>
+        :rules="[ val => isValidEmailAddress(val) || 'Please enter an valid email address']"
+      />
     </div>
     <div class="row q-mb-md">
       <q-input
@@ -29,14 +31,16 @@
         label="Password"
         ref="password"
         lazy-rules
-        :rules="[ val => val.length > 6 || 'Please enter at least 6 characters']"/>
+        :rules="[ val => val.length > 6 || 'Please enter at least 6 characters']"
+      />
     </div>
     <div class="row q-mb-md">
-      <q-space/>
+      <q-space />
       <q-btn
         type="submit"
         color="primary"
-        :label="tab" />
+        :label="tab"
+      />
     </div>
   </form>
 </template>
@@ -45,7 +49,7 @@ import { mapActions } from 'vuex'
 
 export default {
   props: ['tab'],
-  data() {
+  data () {
     return {
       formData: {
         email: '',
@@ -55,25 +59,25 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['loginUser', 'registerUser']),
-    isValidEmailAddress(email) {
+    isValidEmailAddress (email) {
       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(String(email).toLowerCase());
     },
-    submitForm() {
+    submitForm () {
       this.$refs.email.validate()
       this.$refs.password.validate()
 
       if (!this.$refs.email.hasError && !this.$refs.password.hasError) {
         if (this.tab == 'login') {
           this.loginUser(this.formData);
-        }else{
+        } else {
           this.registerUser(this.formData);
         }
       }
     }
   },
   filters: {
-    titleCase(value) {
+    titleCase (value) {
       return value.charAt(0).toUpperCase() + value.slice(1);
     }
   }

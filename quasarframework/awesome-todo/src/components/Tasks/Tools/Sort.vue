@@ -7,7 +7,8 @@
     map-options
     filled
     stack-label
-    label="Sort By" />
+    label="Sort By"
+  />
 </template>
 
 <script>
@@ -32,10 +33,10 @@ export default {
   computed: {
     ...mapState('tasks', ['sort']),
     sortBy: {
-      get() {
+      get () {
         return this.sort;
       },
-      set(value) {
+      set (value) {
         this.setSort(value);
       }
     }
@@ -47,7 +48,7 @@ export default {
 </script>
 
 <style scoped>
-  .q-select {
-    flex: 0 0 112px;
-  }
+.q-select {
+  flex: 0 0 112px;
+}
 </style>
